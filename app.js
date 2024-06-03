@@ -7,6 +7,7 @@ const bcrypt = require('bcrypt')
 const dbpath = path.join(__dirname, 'userDate.db')
 let db = null
 app.use(express.json())
+
 const initializeserver = async () => {
   try {
     db = await open({
@@ -22,10 +23,11 @@ const initializeserver = async () => {
   }
 }
 initializeserver()
+module.exports = app
 
 //registration
 
-app.post('/register/', async (request, response) => {
+app.post('/register', async (request, response) => {
   const {username, name, password, gender, location} = request.body
   const hashedpassword = await bcrypt.hash(password, 10)
   const selectuserquary = `SELECT * FROM user WHERE username = '${username}`
