@@ -8,13 +8,18 @@ const dbpath = path.join(__dirname, 'userDate.db')
 let db = null
 app.use(express.json())
 const initializeserver = async () => {
-  db = await open({
-    filename: dbpath,
-    driver: sqlite3.Database,
-  })
-  app.listen(3000, () => {
-    console.log('server running at http://localhost:3000')
-  })
+  try {
+    db = await open({
+      filename: dbpath,
+      driver: sqlite3.Database,
+    })
+    app.listen(3000, () => {
+      console.log('server running at http://localhost:3000')
+    })
+  } catch (e) {
+    consoel.log(`DB error:${e.message}`)
+    process.exit(1)
+  }
 }
 initializeserver()
 
@@ -27,8 +32,8 @@ app.post('/register/', async (request, response) => {
   const dbuser = await db.get(selectuserquary)
   if (dbuser === undefined) {
     const createuserQuery = `
-        INSERT INTO user(username,name,password,gender,location)
-        SET 
+        INSERT INTO
+         user(username,name,password,gender,location)
         VALUES (
             '${username}',
             '${name}'.
